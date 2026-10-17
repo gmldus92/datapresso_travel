@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>야놀자 화면 분석</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f6fa;
+      color: #222222;
+    }
+
+    header {
+      background: #ea5ec1;
+      color: #fff;
+      padding: 24px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(234,94,193,0.3);
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    header p {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    nav a:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .section {
+      margin-bottom: 60px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #ea5ec1;
+    }
+
+    .section-tag {
+      background: #ea5ec1;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #222222;
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: #888;
+      margin-left: auto;
+    }
+
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .image-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .image-card:hover {
+      box-shadow: 0 6px 20px rgba(234,94,193,0.2);
+      transform: translateY(-2px);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      background: #eee;
+    }
+
+    .image-label {
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-height: 92vh;
+      max-width: 92vw;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    .lightbox-label {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 13px;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>야놀자 화면 분석</h1>
+  <p>여행어플 / 야놀자 — 폴더별 화면 목록</p>
+  <nav>
+    <a href="#section-gnb">GNB</a>
+    <a href="#section-shortcut">숏컷</a>
+    <a href="#section-search">검색결과</a>
+    <a href="#section-main">메인</a>
+    <a href="#section-book-stay">예약플로우_숙소</a>
+    <a href="#section-book-tour">예약플로우_투어</a>
+    <a href="#section-book-1">예약_1</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- 1GNB -->
+  <section class="section" id="section-gnb">
+    <div class="section-header">
+      <span class="section-tag">01</span>
+      <span class="section-title">GNB</span>
+      <span class="section-count">5장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/1GNB/1홈.PNG" alt="1홈">
+        <div class="image-label">1홈</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/1GNB/2티켓.PNG" alt="2티켓">
+        <div class="image-label">2티켓</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/1GNB/3특가.PNG" alt="3특가">
+        <div class="image-label">3특가</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/1GNB/4쿠폰.PNG" alt="4쿠폰">
+        <div class="image-label">4쿠폰</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/1GNB/5발견.PNG" alt="5발견">
+        <div class="image-label">5발견</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2숏컷 -->
+  <section class="section" id="section-shortcut">
+    <div class="section-header">
+      <span class="section-tag">02</span>
+      <span class="section-title">숏컷</span>
+      <span class="section-count">10장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/1해외숙소.PNG" alt="1해외숙소">
+        <div class="image-label">1해외숙소</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/1해외숙소2.PNG" alt="1해외숙소2">
+        <div class="image-label">1해외숙소2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/1해외숙소3.PNG" alt="1해외숙소3">
+        <div class="image-label">1해외숙소3</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/1해외숙소4.PNG" alt="1해외숙소4">
+        <div class="image-label">1해외숙소4</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/1해외숙소5.PNG" alt="1해외숙소5">
+        <div class="image-label">1해외숙소5</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/2해외투어티켓.PNG" alt="2해외투어티켓">
+        <div class="image-label">2해외투어티켓</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/2해외투어티켓2.PNG" alt="2해외투어티켓2">
+        <div class="image-label">2해외투어티켓2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/2해외투어티켓3.PNG" alt="2해외투어티켓3">
+        <div class="image-label">2해외투어티켓3</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/3해외투어티켓_지역PL.PNG" alt="3해외투어티켓_지역PL">
+        <div class="image-label">3해외투어티켓_지역PL</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/2숏컷/3해외패키지.PNG" alt="3해외패키지">
+        <div class="image-label">3해외패키지</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3검색결과 -->
+  <section class="section" id="section-search">
+    <div class="section-header">
+      <span class="section-tag">03</span>
+      <span class="section-title">검색결과</span>
+      <span class="section-count">7장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/0홈.PNG" alt="0홈">
+        <div class="image-label">0홈</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/1검색_추천.PNG" alt="1검색_추천">
+        <div class="image-label">1검색_추천</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/2해외숙소.PNG" alt="2해외숙소">
+        <div class="image-label">2해외숙소</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/3해외패키지.PNG" alt="3해외패키지">
+        <div class="image-label">3해외패키지</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/4해외투어티켓.PNG" alt="4해외투어티켓">
+        <div class="image-label">4해외투어티켓</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/5놀티켓.PNG" alt="5놀티켓">
+        <div class="image-label">5놀티켓</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/3검색결과/6항공.PNG" alt="6항공">
+        <div class="image-label">6항공</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4메인 -->
+  <section class="section" id="section-main">
+    <div class="section-header">
+      <span class="section-tag">04</span>
+      <span class="section-title">메인</span>
+      <span class="section-count">9장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/0팝업.PNG" alt="0팝업">
+        <div class="image-label">0팝업</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/1메인.PNG" alt="1메인">
+        <div class="image-label">1메인</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/2최근본.PNG" alt="2최근본">
+        <div class="image-label">2최근본</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/2최근본추천.PNG" alt="2최근본추천">
+        <div class="image-label">2최근본추천</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/3라이브_해외숙소.PNG" alt="3라이브_해외숙소">
+        <div class="image-label">3라이브_해외숙소</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/4국내즐길거리.PNG" alt="4국내즐길거리">
+        <div class="image-label">4국내즐길거리</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/5특가.PNG" alt="5특가">
+        <div class="image-label">5특가</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/6호캉스.PNG" alt="6호캉스">
+        <div class="image-label">6호캉스</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/4메인/7국내레저.PNG" alt="7국내레저">
+        <div class="image-label">7국내레저</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5예약_1 -->
+  <section class="section" id="section-book-1">
+    <div class="section-header">
+      <span class="section-tag">05</span>
+      <span class="section-title">예약_1</span>
+      <span class="section-count">13장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/1메인.PNG" alt="1메인">
+        <div class="image-label">1메인</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/2항공.PNG" alt="2항공">
+        <div class="image-label">2항공</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/2항공2.PNG" alt="2항공2">
+        <div class="image-label">2항공2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외숙소.PNG" alt="3해외숙소">
+        <div class="image-label">3해외숙소</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외숙소2.PNG" alt="3해외숙소2">
+        <div class="image-label">3해외숙소2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외투어티켓.PNG" alt="3해외투어티켓">
+        <div class="image-label">3해외투어티켓</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외투어티켓2.PNG" alt="3해외투어티켓2">
+        <div class="image-label">3해외투어티켓2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외투어티켓3.PNG" alt="3해외투어티켓3">
+        <div class="image-label">3해외투어티켓3</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/3해외투어티켓4.PNG" alt="3해외투어티켓4">
+        <div class="image-label">3해외투어티켓4</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/4놀버스투어.PNG" alt="4놀버스투어">
+        <div class="image-label">4놀버스투어</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/5이심.PNG" alt="5이심">
+        <div class="image-label">5이심</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/6장바구니.PNG" alt="6장바구니">
+        <div class="image-label">6장바구니</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약_1/6하트.PNG" alt="6하트">
+        <div class="image-label">6하트</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5예약플로우_숙소 -->
+  <section class="section" id="section-book-stay">
+    <div class="section-header">
+      <span class="section-tag">06</span>
+      <span class="section-title">예약플로우_숙소</span>
+      <span class="section-count">8장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/1검색결과.PNG" alt="1검색결과">
+        <div class="image-label">1검색결과</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/2지도보기.PNG" alt="2지도보기">
+        <div class="image-label">2지도보기</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/3상세페이지.PNG" alt="3상세페이지">
+        <div class="image-label">3상세페이지</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/4날짜선택.PNG" alt="4날짜선택">
+        <div class="image-label">4날짜선택</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/5옵션.PNG" alt="5옵션">
+        <div class="image-label">5옵션</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/6결제페이지.PNG" alt="6결제페이지">
+        <div class="image-label">6결제페이지</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/6결제페이지2.PNG" alt="6결제페이지2">
+        <div class="image-label">6결제페이지2</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_숙소/6결제페이지3.PNG" alt="6결제페이지3">
+        <div class="image-label">6결제페이지3</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5예약플로우_투어 -->
+  <section class="section" id="section-book-tour">
+    <div class="section-header">
+      <span class="section-tag">07</span>
+      <span class="section-title">예약플로우_투어</span>
+      <span class="section-count">7장</span>
+    </div>
+    <div class="image-grid">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/1상세페이지.PNG" alt="1상세페이지">
+        <div class="image-label">1상세페이지</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/2파트너정보.PNG" alt="2파트너정보">
+        <div class="image-label">2파트너정보</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/3날짜선택.PNG" alt="3날짜선택">
+        <div class="image-label">3날짜선택</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/4옵션.PNG" alt="4옵션">
+        <div class="image-label">4옵션</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/5확인모달.PNG" alt="5확인모달">
+        <div class="image-label">5확인모달</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/6접수완료.PNG" alt="6접수완료">
+        <div class="image-label">6접수완료</div>
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="여행어플/야놀자/5예약플로우_투어/7상세내역.PNG" alt="7상세내역">
+        <div class="image-label">7상세내역</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-label" id="lightbox-label"></div>
+</div>
+
+<script>
+  function openLightbox(card) {
+    const img = card.querySelector('img');
+    const label = card.querySelector('.image-label').textContent;
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox-label').textContent = label;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>

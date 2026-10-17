@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이리얼트립 vs 놀 비교 분석</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f6fa;
+      color: #222222;
+    }
+
+    header {
+      background: #222222;
+      color: #fff;
+      padding: 24px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    header h1 .m { color: #3daeff; }
+    header h1 .y { color: #ea5ec1; }
+
+    header p {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    nav a:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    nav a.home {
+      background: #1456f0;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .section {
+      margin-bottom: 64px;
+      scroll-margin-top: 140px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #222222;
+    }
+
+    .section-tag {
+      background: #222222;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #222222;
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: #888;
+      margin-left: auto;
+    }
+
+    /* 좌우 비교 */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* 상/하 구조 */
+    .compare.stacked {
+      grid-template-columns: 1fr;
+    }
+
+    .compare.stacked .image-grid {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .col {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-top: 4px solid;
+    }
+
+    .col.marit { border-top-color: #1456f0; }
+    .col.nol { border-top-color: #ea5ec1; }
+
+    .col-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .col-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .marit .col-badge { background: #1456f0; }
+    .nol .col-badge { background: #ea5ec1; }
+
+    .col-name {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .marit .col-name { color: #1456f0; }
+    .nol .col-name { color: #ea5ec1; }
+
+    .col-count {
+      font-size: 11px;
+      color: #888;
+      margin-left: auto;
+    }
+
+    .sub-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .marit .sub-label { background: #eef2ff; color: #1456f0; }
+    .nol .sub-label { background: #fdf0f9; color: #ea5ec1; }
+
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .image-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      width: 180px;
+      flex-shrink: 0;
+    }
+
+    .image-card.wide {
+      width: 300px;
+    }
+
+    .marit .image-card:hover {
+      box-shadow: 0 6px 20px rgba(20,86,240,0.18);
+      transform: translateY(-2px);
+    }
+
+    .nol .image-card:hover {
+      box-shadow: 0 6px 20px rgba(234,94,193,0.18);
+      transform: translateY(-2px);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 340px;
+      object-fit: contain;
+      object-position: top;
+      display: block;
+      background: #f0f1f5;
+    }
+
+    .image-label {
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .empty {
+      font-size: 12px;
+      color: #aaa;
+      padding: 24px 0;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-height: 92vh;
+      max-width: 92vw;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    .lightbox-label {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 13px;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 860px) {
+      header { padding: 20px 16px; }
+      main { padding: 32px 16px 64px; }
+      .compare { grid-template-columns: 1fr; }
+      .image-card, .image-card.wide { width: calc(50% - 7px); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1><span class="m">마이리얼트립</span> vs <span class="y">놀</span> 비교 분석</h1>
+  <p>여행어플 / 비교 — 두 서비스 화면 비교</p>
+  <nav>
+    <a class="home" href="index.html">← 브릿지</a>
+    <a href="#section-main">01 메인화면 비교</a>
+    <a href="#section-unique">03 서로에게 없는 기능</a>
+    <a href="#section-weak">05 아쉬운점</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- (1) 메인화면 비교 -->
+  <section class="section" id="section-main">
+    <div class="section-header">
+      <span class="section-tag">01</span>
+      <span class="section-title">메인화면 비교</span>
+      <span class="section-count">4장</span>
+    </div>
+    <div class="compare">
+      <div class="col marit">
+        <div class="col-head">
+          <span class="col-badge">M</span>
+          <span class="col-name">마이리얼트립</span>
+          <span class="col-count">2장</span>
+        </div>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/IMG_2431.PNG" alt="IMG_2431">
+            <div class="image-label">IMG_2431</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/마리트/4메인_지역/2지역숏컷.PNG" alt="지역숏컷">
+            <div class="image-label">지역숏컷</div>
+          </div>
+        </div>
+      </div>
+      <div class="col nol">
+        <div class="col-head">
+          <span class="col-badge">N</span>
+          <span class="col-name">놀</span>
+          <span class="col-count">2장</span>
+        </div>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/야놀자/IMG_2456.PNG" alt="IMG_2456">
+            <div class="image-label">IMG_2456</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/야놀자/IMG_2472.PNG" alt="IMG_2472">
+            <div class="image-label">IMG_2472</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (3) 서로에게 없는 기능 -->
+  <section class="section" id="section-unique">
+    <div class="section-header">
+      <span class="section-tag">03</span>
+      <span class="section-title">서로에게 없는 기능</span>
+      <span class="section-count">3장</span>
+    </div>
+    <div class="compare">
+      <div class="col marit">
+        <div class="col-head">
+          <span class="col-badge">M</span>
+          <span class="col-name">마이리얼트립</span>
+          <span class="col-count">2장</span>
+        </div>
+        <span class="sub-label">커뮤니티</span>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_동행.png" alt="마리트_동행">
+            <div class="image-label">마리트_동행</div>
+          </div>
+          <div class="image-card wide" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_지도.png" alt="마리트_지도">
+            <div class="image-label">마리트_지도</div>
+          </div>
+        </div>
+      </div>
+      <div class="col nol">
+        <div class="col-head">
+          <span class="col-badge">N</span>
+          <span class="col-name">놀</span>
+          <span class="col-count">1장</span>
+        </div>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/야놀자/놀_지도.png" alt="놀_지도">
+            <div class="image-label">놀_지도</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (5) 아쉬운점 -->
+  <section class="section" id="section-weak">
+    <div class="section-header">
+      <span class="section-tag">05</span>
+      <span class="section-title">아쉬운점</span>
+      <span class="section-count">8장</span>
+    </div>
+    <div class="compare stacked">
+      <div class="col marit">
+        <div class="col-head">
+          <span class="col-badge">M</span>
+          <span class="col-name">마이리얼트립</span>
+          <span class="col-count">7장</span>
+        </div>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/마리트/5이모저모/광고_스플래시.PNG" alt="광고_스플래시">
+            <div class="image-label">광고_스플래시</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_광고.png" alt="마리트_광고">
+            <div class="image-label">마리트_광고</div>
+          </div>
+          <div class="image-card wide" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_광고2.png" alt="마리트_광고2">
+            <div class="image-label">마리트_광고2</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/마리트/5이모저모/숏컷_스플래시.PNG" alt="숏컷_스플래시">
+            <div class="image-label">숏컷_스플래시</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_외부이동.png" alt="마리트_외부이동">
+            <div class="image-label">마리트_외부이동</div>
+          </div>
+          <div class="image-card wide" onclick="openLightbox(this)">
+            <img src="여행어플/비교/마리트/마리트_외부이동2.png" alt="마리트_외부이동2">
+            <div class="image-label">마리트_외부이동2</div>
+          </div>
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/마리트/5이모저모/디자인1.PNG" alt="디자인1">
+            <div class="image-label">디자인1</div>
+          </div>
+        </div>
+      </div>
+      <div class="col nol">
+        <div class="col-head">
+          <span class="col-badge">N</span>
+          <span class="col-name">놀</span>
+          <span class="col-count">1장</span>
+        </div>
+        <div class="image-grid">
+          <div class="image-card" onclick="openLightbox(this)">
+            <img src="여행어플/비교/야놀자/놀_판매종료.png" alt="놀_판매종료">
+            <div class="image-label">놀_판매종료</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-label" id="lightbox-label"></div>
+</div>
+
+<script>
+  function openLightbox(card) {
+    const img = card.querySelector('img');
+    const label = card.querySelector('.image-label').textContent;
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox-label').textContent = label;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
